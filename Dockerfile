@@ -15,8 +15,6 @@ RUN PIP_USER=1 PIP_IGNORE_INSTALLED=1 pipenv install --system --deploy --ignore-
 
 FROM base
 
-ENV
-
 COPY --from=builder $PYROOT/lib/ $PYROOT/lib/
 COPY run.py /usr/bin
 
