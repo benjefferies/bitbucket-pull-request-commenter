@@ -53,6 +53,7 @@ def comment_on_pr():
         headers={'Authorization': f"Bearer {access_token}"})
     if post.status_code != 201:
         print("Failed to post comment")
+        exit(1)
     else:
         print("Successfully posted comment")
 
