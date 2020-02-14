@@ -28,14 +28,14 @@ def comment_on_pr():
         print("BITBUCKET_PR_ID must be set")
         exit(1)
 
-    project = os.getenv('BITBUCKET_PROJECT_KEY')
-    if not project:
-        print("BITBUCKET_PROJECT_KEY must be set")
+    owner = os.getenv('BITBUCKET_REPO_OWNER')
+    if not owner:
+        print("BITBUCKET_REPO_OWNER must be set")
         exit(1)
 
     repo_slug = os.getenv('BITBUCKET_REPO_SLUG')
     if not repo_slug:
-        print("BITBUCKET_PR_ID must be set")
+        print("BITBUCKET_REPO_SLUG must be set")
         exit(1)
 
     comment = os.getenv('PR_COMMENT')
@@ -44,7 +44,7 @@ def comment_on_pr():
         exit(1)
 
     content = {'content': {'raw': f"Automated PR comment\n\n{comment}", 'markup': 'markdown'}}
-    url = f"{bitbucket_api}/2.0/repositories/{project}/{repo_slug}/pullrequests/{pr_id}/comments"
+    url = f"{bitbucket_api}/2.0/repositories/{owner}/{repo_slug}/pullrequests/{pr_id}/comments"
     print(f"Adding comment: {url}")
     print(f"{content}")
     post = requests.post(
