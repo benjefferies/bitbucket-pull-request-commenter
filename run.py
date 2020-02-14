@@ -20,6 +20,7 @@ def comment_on_pr():
     if 'access_token' not in auth_token_response.json():
         print("Could not get access token")
         exit(1)
+    print("Successfully authenticated")
     access_token = auth_token_response.json()['access_token']
 
     pr_id = os.getenv('BITBUCKET_PR_ID')
@@ -43,11 +44,17 @@ def comment_on_pr():
         exit(1)
 
     content = {'content': {'raw': f"Automated PR comment\n\n{comment}", 'markup': 'markdown'}}
+    url = f"{bitbucket_api}/2.0/repositories/{project}/{repo_slug}/pullrequests/{pr_id}/comments"
+    print(f"Adding comment: {url}")
+    print(f"{content}")
     post = requests.post(
-        f"{bitbucket_api}/2.0/repositories/{project}/{repo_slug}/pullrequests/{pr_id}/comments",
+        url,
         json=content,
         headers={'Authorization': f"Bearer {access_token}"})
-    print(post)
+    if post.status_code != 201:
+        print("Failed to post comment")
+    else:
+        print("Successfully posted comment")
 
 
 if __name__ == '__main__':
