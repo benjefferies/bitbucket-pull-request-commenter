@@ -38,9 +38,14 @@ def comment_on_pr():
         print("BITBUCKET_REPO_SLUG must be set")
         exit(1)
 
-    comment = os.getenv('PR_COMMENT')
-    if not comment:
-        print("PR_COMMENT must be set")
+    if os.getenv('PR_COMMENT'):
+        comment = os.getenv('PR_COMMENT')
+    elif os.getenv('PR_COMMENT_FILE'):
+        comment_file = os.getenv('PR_COMMENT_FILE')
+        with open(comment_file, 'r') as file:
+            comment = file.read()
+    else:
+        print("PR_COMMENT or PR_COMMENT_FILE must be set")
         exit(1)
 
     content = {'content': {'raw': f"Automated PR comment\n\n```\n{comment}\n```"}}
